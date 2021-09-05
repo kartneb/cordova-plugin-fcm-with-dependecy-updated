@@ -6,6 +6,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.gae.scaffolder.plugin.interfaces.*;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -140,6 +142,8 @@ public class FCMPlugin extends CordovaPlugin {
                 this.deleteInstanceId(callbackContext);
             } else if (action.equals("hasPermission")) {
                 this.hasPermission(callbackContext);
+            } else if (action.equals("isGooglePlayServicesAvailable")) {
+                this.isGooglePlayServicesAvailable(callbackContext);
             } else {
                 callbackContext.error("Method not found");
                 return false;
@@ -310,6 +314,20 @@ public class FCMPlugin extends CordovaPlugin {
         } catch (Exception e) {
             Log.d(TAG, "\tERROR sendTokenRefresh: " + e.getMessage());
         }
+    }
+
+    private void isGooglePlayServicesAvailable(final CallbackContext callbackContext) {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    Context context = cordova.getContext();
+                    int playServicesAvailable = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
+                    callbackContext.success(playServicesAvailable == ConnectionResult.SUCCESS ? 1 : 0);
+                } catch (Exception e) {
+                    callbackContext.error(e.getMessage());
+                }
+            }
+        });
     }
 
     @Override
