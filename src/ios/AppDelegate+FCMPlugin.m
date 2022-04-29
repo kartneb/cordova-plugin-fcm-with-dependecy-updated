@@ -195,12 +195,16 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 
 + (NSData*)getLastPush {
     NSData* returnValue = lastPush;
+    initialPushPayload = nil;
     lastPush = nil;
     return returnValue;
 }
 
 + (NSData*)getInitialPushPayload {
-    return initialPushPayload;
+    NSData* returnValue = initialPushPayload;
+    initialPushPayload = nil;
+    lastPush = nil;
+    return returnValue;
 }
 
 + (NSString*)getFCMToken {
