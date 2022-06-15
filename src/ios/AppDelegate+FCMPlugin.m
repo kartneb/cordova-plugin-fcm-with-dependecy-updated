@@ -195,7 +195,6 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
 
 + (NSData*)getLastPush {
     NSData* returnValue = lastPush;
-    initialPushPayload = nil;
     lastPush = nil;
     return returnValue;
 }
